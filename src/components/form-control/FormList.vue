@@ -1,7 +1,12 @@
 <script setup lang="ts">
 </script>
 <template>
-3
-<slot></slot>
+    <div class="form-list">
+        <slot></slot>
+    </div>
 </template>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.form-list{
+    margin-top: 20px;
+}
+</style>
