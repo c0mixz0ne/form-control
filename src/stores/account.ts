@@ -1,12 +1,33 @@
-import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
+import type { IAccounts, IUser } from '@/types/types';
 
-export const useCounterStore = defineStore('counter', () => {
-  const count = ref(0)
-  const doubleCount = computed(() => count.value * 2)
-  function increment() {
-    count.value++
-  }
+export const useAccountsStore = defineStore('accounts', {
+	state: () => ({
+		accounts: [] as IAccounts,
+	}),
 
-  return { count, doubleCount, increment }
-})
+	actions: {
+		getAccountsFromStorage() {
+			const storedData = localStorage.getItem('accounts');
+			if (storedData) {
+				this.accounts = JSON.parse(storedData);
+			} else {
+				this.setAccountsDefaultValues();
+			}
+		},
+
+		setAccountsDefaultValues() {
+			this.accounts = [];
+			this.setAccountsToStorage();
+		},
+
+		setAccountsToStorage() {
+			localStorage.setItem('accounts', JSON.stringify(this.accounts));
+		},
+
+		setOneAccount() {
+
+
+		}
+	},
+})  
