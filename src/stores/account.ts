@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
-import type { IAccounts, IUser } from '@/types/types';
+import type { IAccountsList, IAccount } from '@/types/types';
 
 export const useAccountsStore = defineStore('accounts', {
 	state: () => ({
-		accounts: [] as IAccounts,
+		accounts: [] as IAccountsList,
 	}),
 
 	actions: {
