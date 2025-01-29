@@ -1,7 +1,15 @@
 export type AccountsList = IAccount[]
 
+export type ErrorStatus = 'success' | 'error' | 'warning';
+
+export interface IAccountErrors {
+	login?: string; 
+	password?: string;
+	type?: string;
+}
+
 export interface IAccount {
-	label: Array<{ text: string }> | null;
+	label: string | null;
 	type: 'LDAP' | 'Локальная' | null; 
 	login: string | null;
 	password: string | null;

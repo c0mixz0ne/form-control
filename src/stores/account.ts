@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { AccountsList, IAccount, IAccountError } from '@/types/types';
+import type { IAccount, IAccountError } from '@/types/types';
 
 export const useAccountsStore = defineStore('accounts', {
 	state: () => ({
@@ -8,73 +8,43 @@ export const useAccountsStore = defineStore('accounts', {
 	}),
 
 	actions: {
-		addAccount(): void {
-			this.accounts.push({
-				label: null,
-				type: null,
-				login: null,
-				password: null 
-			})
+		addAccount(): void {	
+			const lastAccount = this.accounts[this.accounts.length - 1]
+
+			if(!lastAccount){
+				this.accounts.push({
+					label: null,
+					type: null,
+					login: null,
+					password: null 
+				})
+			} else {
+				const lastCheck = Object.values(lastAccount).every(value => value === null)
+				if (lastCheck) {
+					console.warn('Last account on the form is empty')	
+				}
+				else {
+					this.accounts.push({
+						label: null,
+						type: null,
+						login: null,
+						password: null 
+					})
+				}
+			}		
 		},
 		deleteAccount(index: number): void {
 			this.accounts.splice(index,1)
 			this.saveToLocalStorage()
 		},
+
 		updateAccount(account: IAccount, index: number){		
-			// this.validateAccount(account ,index)	
 			this.accounts[index] = account
 			this.saveToLocalStorage()
 		},	
-		// validateAccount(account: IAccount, index: number) {
-		// 	if (account.type === 'LDAP') {
-		// 		account.password = null
-		// 	}
 
-		// 	if (!account.login?.length) {
-		// 		this.errors.login = 'error'
-		// 		console.log(this.errors, 222);
-				
-		// 	}
-
-		// 	// if (account.password?.length === 0) {
-		// 	// 	this.errors.password = 'error'
-		// 	// }
-
-		// 	// if (account.type?.length === 0) {
-		// 	// 	this.errors.type = 'error'
-		// 	// }
-
-		// 	// if (this.errors.type || this.errors.password || this.errors.login) {
-		// 	// 	this.errors.account = index;
-
-		// 	// 	console.log(this.errors);	
-		// 	// }
-
-		// },	
 		saveToLocalStorage() {			
 			localStorage.setItem('accounts', JSON.stringify(this.accounts));
 		},
-		// getAccountsFromStorage() {
-		// 	const storedData = localStorage.getItem('accounts');
-		// 	if (storedData) {
-		// 		this.accounts = JSON.parse(storedData);
-		// 	} else {
-		// 		this.setAccountsDefaultValues();
-		// 	}
-		// },
-
-		// setAccountsDefaultValues() {
-		// 	this.accounts = [];
-		// 	this.setAccountsToStorage();
-		// },
-
-		// setAccountsToStorage() {
-		// 	localStorage.setItem('accounts', JSON.stringify(this.accounts));
-		// },
-
-		// setOneAccount() {
-
-
-		// }
 	},
 })  
