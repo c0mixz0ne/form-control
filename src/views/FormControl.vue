@@ -24,7 +24,6 @@ const addAccount = () => {
 }
 
 const updateAccount = (account: IAccount, index: number) => {
-	formatLabel(index)
 	validateAccount(account, index)
 
 	if (errors.value[index]?.type || errors.value[index]?.login || errors.value[index]?.password) {
@@ -33,7 +32,6 @@ const updateAccount = (account: IAccount, index: number) => {
 	else {		
 		accountStore.saveToLocalStorage()
 	}
-	
 }
 
 const validateAccount = (account: IAccount, index: number): void => {
@@ -67,11 +65,6 @@ const validateAccount = (account: IAccount, index: number): void => {
 			}
 		}		
 	}
-}
-
-const formatLabel = (index: number) => {
-	console.log(accounts[index].label);
-	
 }
 </script>
 

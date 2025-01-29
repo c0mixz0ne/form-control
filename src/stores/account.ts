@@ -21,6 +21,7 @@ export const useAccountsStore = defineStore('accounts', {
 			} else {
 				const lastCheck = Object.values(lastAccount).every(value => value === null)
 				if (lastCheck) {
+					alert('Заполните пустое поле перед созданием нового')
 					console.warn('Last account on the form is empty')	
 				}
 				else {

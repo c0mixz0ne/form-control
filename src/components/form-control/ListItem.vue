@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue';
+import { defineProps, defineEmits, ref } from 'vue';
 import type { IAccount, ErrorStatus, IAccountErrors } from '@/types/types';
 
 import { NInput, NSelect, NButton, NIcon } from 'naive-ui'
@@ -27,6 +27,11 @@ const emits = defineEmits<{
 	(event: 'update-account', account: IAccount, index: number): void;
 }>()
 
+const label = ref((Array.isArray(props.account.label) ? 
+      props.account.label.map((item: { text: string }) => item.text).join(';') : 
+      ''
+));
+
 const deleteAccountHandler = (index: number) => {
 	emits('delete-account', index)
 }
@@ -35,10 +40,15 @@ const updateHandler = (account: IAccount, index: number) => {
 	emits('update-account', account, index)
 }
 
+const updateHandlerLabel = (account: IAccount, index: number) => {	
+	props.account.label = label.value.split(';').map(text => ({ text }));
+
+	emits('update-account', account, index)
+}
 </script>
 	<template>
 		<div class="list-item">
-			<n-input @blur="updateHandler(account, index)" v-model:value="account.label" type="text" size="medium" placeholder="Метки" :maxlength="50" />
+			<n-input @blur="updateHandlerLabel(account, index)" v-model:value="label" type="text" size="medium" placeholder="Метки" :maxlength="50" />
 			<n-select :status="errors[index]?.type ? 'error' : 'success' as ErrorStatus" @vue:updated="updateHandler(account, index)" v-model:value="account.type" :options="options"
 				placeholder="Тип записи" size="medium" />
 			<n-input :status="errors[index]?.login ? 'error' : 'success' as ErrorStatus" @blur="updateHandler(account, index)" v-model:value="account.login" type="text" size="medium"

@@ -9,7 +9,7 @@ export interface IAccountErrors {
 }
 
 export interface IAccount {
-	label: string | null;
+	label: Array<{ text: string }> | string | null;
 	type: 'LDAP' | 'Локальная' | null; 
 	login: string | null;
 	password: string | null;
