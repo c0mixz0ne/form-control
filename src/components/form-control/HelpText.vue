@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NTag, NAlert } from 'naive-ui'
+import { NAlert } from 'naive-ui'
 </script>
 <template>
   <div class="help-text">

@@ -42,7 +42,7 @@ const updateHandler = (account: IAccount, index: number) => {
 }
 
 const updateHandlerLabel = (account: IAccount, index: number) => {
-  props.account.label = label.value.split(';').map((text) => ({ text }))
+  account.label = label.value.split(';').map((text) => ({ text }))
 
   emits('update-account', account, index)
 }
