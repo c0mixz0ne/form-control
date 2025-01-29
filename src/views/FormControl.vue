@@ -1,62 +1,66 @@
 <script setup lang="ts">
+import Container from '@/components/layout/Container.vue';
 import AddButton from '@/components/form-control/AddButton.vue';
 import HelpText from '@/components/form-control/HelpText.vue';
 import FormList from '@/components/form-control/FormList.vue';
 import ListItem from '@/components/form-control/ListItem.vue';
 
-import Container from '@/components/layout/Container.vue';
-
 import { onMounted, reactive, ref } from 'vue';
+import { useAccountsStore } from '@/stores/account'
+import type { AccountsList, IAccount } from '@/types/types';
 
+const accountStore = useAccountsStore()
+const accounts = reactive(accountStore.accounts)
+const errors = ref<{ [key: string]: string }>({});
 
-import type { IAccountsList, IAccount } from '@/types/types';
+console.log(accounts);
 
-const accounts = reactive<IAccount[]>([
-    { label: '11111', type: 'LDAP', login: 'login', password: '123' },
-	{ label: '11111', type: 'LDAP', login: 'login', password: null },
-]);
-
-const errors = ref<string[]>([])
 
 const deleteAccount = (index: number) => {
-	console.log(accounts, index);
-	
-	accounts.splice(index, 1)
-};
-
-const saveAccount = (index: number) => {
-	errors.value = []
-	console.log(validateRequireData(accounts[index]));
-}
-
-const validateRequireData = (account: IAccount): void => {
-	const validateInputs: (keyof IAccount)[] = [
-		'type',
-		'login',
-		'password',
-	]
-
-	validateInputs.forEach((key) => {
-		if (account.type === 'LDAP'){
-			if (key === 'password') return
-		}
-
-		if (account[key] === null || account[key] === undefined || account[key] === '') {
-			errors.value.push(key);
-		}
-	})
+	accountStore.deleteAccount(index)
+	console.log(accounts);
 }
 
 const addAccount = () => {
-	accounts.push(
-		{ 
-			label: null,
-			type: null,
-			login: null,
-			password: null 
-		}
-	)
+	accountStore.addAccount()
 	console.log(accounts);
+}
+
+const updateAccount = (account: IAccount, index: number) => {
+	validateAccount(account, index)
+	// accountStore.updateAccount(account, index)
+	// console.log(accounts);
+}
+
+const validateAccount = (account: IAccount, index: number) => {
+	const validators: (keyof IAccount)[] = ['login', 'type', 'password'];
+	// console.log(account);
+	
+	// if (account.type === 'LDAP') {
+	// 	console.log('da');
+		
+	// 	// validators.filter(item => item !== 'password');
+	// }
+	
+	for (const field of validators) {
+		// console.log(field);
+		
+    	const value = account[field];
+
+		if (value === null || value === '') {
+			errors.value[field] = `${field} не может быть пустым`; // Добавляем ошибку, если поле пустое
+		}
+
+
+		console.log(account.type);
+		
+		// if (value !== 'LDAP' || value !== 'Локальная') {
+
+		// }
+  	}
+
+	// console.log(errors.value);
+	
 }
 </script>
 
@@ -73,7 +77,7 @@ const addAccount = () => {
 						:index="index" 
 						:account="account" 
 						@delete-account="deleteAccount"
-						@save-account="saveAccount"
+						@update-account="updateAccount"
 					/>
 				</FormList>
 			</Container>
