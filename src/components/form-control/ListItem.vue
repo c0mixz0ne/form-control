@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps, defineEmits, ref } from 'vue'
+import { defineProps, defineEmits, ref, watchEffect } from 'vue'
 import type { IAccount, ErrorStatus, IAccountErrors } from '@/types/types'
 
 import { NInput, NSelect, NButton, NIcon } from 'naive-ui'
@@ -27,11 +27,13 @@ const emits = defineEmits<{
   (event: 'update-account', account: IAccount, index: number): void
 }>()
 
-const label = ref(
-  Array.isArray(props.account.label)
-    ? props.account.label.map((item: { text: string }) => item.text).join(';')
-    : '',
-)
+const label = ref('');
+
+watchEffect(() => {
+  label.value = Array.isArray(props.account.label)
+    ? props.account.label.map((item) => item.text).join('; ')
+    : '';
+});
 
 const deleteAccountHandler = (index: number) => {
   emits('delete-account', index)
